@@ -1,6 +1,6 @@
-import json, os, shutil, re, sys
+import json, os, shutil, re, sys, urllib
 
-__INPUT_FILE__  = 'RFC-all/rfc-index.txt'
+__RFC_INDEX_URL__ = "https://www.rfc-editor.org/rfc/rfc-index.txt"
 __OUTPUT_FILE__ = 'rfc.json'
 
 __COMPLETE_REGEX__ = r"\n(\d{4})\s(?:(Not Issued)|(?:((?:[^\.]+\.(?!\s+[A-Z]\.))*[^\.]+)\.\s*((?:(?:[A-Z]\.)+\s*[^\.,]+(?:\.|,)\s*){1,3})(\w+\s*\d{4})\.\s*(?:\((Format[^\)]*)\))?\s*(?:\((Obsoletes[^\)]*)\))?\s*(?:\((Obsoleted\s*by[^\)]*)\))?\s*(?:\((Updates[^\)]*)\))?\s*(?:\((Updated\s*by[^\)]*)\))?\s*(?:\((Also[^\)]*)\))?\s*(?:\((Status[^\)]*)\))?\s*(?:\((DOI[^\)]*)\))?))"
@@ -11,11 +11,10 @@ __DOI_REGEX__      = r"DOI:?\s*(.*)"
 __AUTHORS_REGEX__  = r"(?:((?:[A-Z]\.)+\s[^,\.]*)[,\.]\s?)+?"
 __RFC_REGEX__      = r"\s?(?:([A-Z0-9]{4,})(?:,\s)?)+?"
 
-def create_json( file_path ):
+
+def create_json( rfc_index_text ):
   json_obj = {}
-  with open(file_path, 'r') as content_file:
-    content = content_file.read()
-  matches = re.findall(__COMPLETE_REGEX__, content)
+  matches = re.findall(__COMPLETE_REGEX__, rfc_index_text)
   for match in matches:
     rfc_number = match[0]
     if re.search("Not Issued", match[1]):
@@ -42,16 +41,18 @@ def clean_text(text):
 
 
 def main():
-  input_path  = __INPUT_FILE__
+  print("Read RFC Index text")
+  rfc_index_text = urllib.urlopen(__RFC_INDEX_URL__).read()
+  print("Done")
   output_path = __OUTPUT_FILE__
   if len(sys.argv)>=2:
-    input_path  = sys.argv[1]
-  if len(sys.argv)>=3:
-    output_path = sys.argv[2]
-  json_obj = create_json(input_path)
+    output_path = sys.argv[1]
+  json_obj = create_json(rfc_index_text)
   with open(output_path, 'w') as outfile:
     json.dump(json_obj, outfile)
 
 
 if __name__ == "__main__":
+  print("Start Program")
   main()
+  print("End Program")
