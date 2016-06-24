@@ -22,17 +22,17 @@ def create_json( file_path ):
       json_obj[rfc_number] = "Not Issued"
     else:
       json_sub_obj = {}
-      json_sub_obj["title"]        = clean_text(match[2])
-      json_sub_obj["authors"]      = re.findall(__AUTHORS_REGEX__, clean_text(match[3]))
-      json_sub_obj["issue_data"]   = clean_text(match[4])
-      if match[5]!="":  json_sub_obj["format"]       = re.findall(__FORMAT_REGEX__,       clean_text(match[5]))[0]
-      if match[6]!="":  json_sub_obj["obsolets"]     = re.findall(__RFC_REGEX__,          clean_text(match[6]))     #list of rfc
-      if match[7]!="":  json_sub_obj["obsoleted_by"] = re.findall(__RFC_REGEX__,          clean_text(match[7]))     #list of rfc
-      if match[8]!="":  json_sub_obj["updates"]      = re.findall(__RFC_REGEX__,          clean_text(match[8]))     #list of rfc
-      if match[9]!="":  json_sub_obj["updated_by"]   = re.findall(__RFC_REGEX__,          clean_text(match[9]))     #list of rfc
-      if match[10]!="": json_sub_obj["also_fyi"]     = re.findall(__ALSO_FYI_REGEX__,     clean_text(match[10]))[0]
-      if match[11]!="": json_sub_obj["status"]       = re.findall(__STATUS_REGEX__,       clean_text(match[11]))[0]
-      if match[12]!="": json_sub_obj["doi"]          = re.findall(__DOI_REGEX__,          clean_text(match[12]))[0]
+      json_sub_obj["title"]      = clean_text(match[2])
+      json_sub_obj["authors"]    = re.findall(__AUTHORS_REGEX__, clean_text(match[3]))
+      json_sub_obj["issue_data"] = clean_text(match[4])
+      if match[5]!="":  json_sub_obj["format"]       = re.findall(__FORMAT_REGEX__,   clean_text(match[5]))[0]
+      if match[6]!="":  json_sub_obj["obsolets"]     = re.findall(__RFC_REGEX__,      clean_text(match[6]))     #list of rfc
+      if match[7]!="":  json_sub_obj["obsoleted_by"] = re.findall(__RFC_REGEX__,      clean_text(match[7]))     #list of rfc
+      if match[8]!="":  json_sub_obj["updates"]      = re.findall(__RFC_REGEX__,      clean_text(match[8]))     #list of rfc
+      if match[9]!="":  json_sub_obj["updated_by"]   = re.findall(__RFC_REGEX__,      clean_text(match[9]))     #list of rfc
+      if match[10]!="": json_sub_obj["also_fyi"]     = re.findall(__ALSO_FYI_REGEX__, clean_text(match[10]))[0]
+      if match[11]!="": json_sub_obj["status"]       = re.findall(__STATUS_REGEX__,   clean_text(match[11]))[0]
+      if match[12]!="": json_sub_obj["doi"]          = re.findall(__DOI_REGEX__,      clean_text(match[12]))[0]
       json_obj[rfc_number] = json_sub_obj
   return json_obj
 
