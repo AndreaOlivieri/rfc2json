@@ -1,4 +1,4 @@
-import json, os, shutil, re
+import json, os, shutil, re, sys
 
 __INPUT_FILE__  = 'RFC-all/rfc-index.txt'
 __OUTPUT_FILE__ = 'rfc.json'
@@ -42,8 +42,14 @@ def clean_text(text):
 
 
 def main():
-  json_obj = create_json(__INPUT_FILE__)
-  with open(__OUTPUT_FILE__, 'w') as outfile:
+  input_path  = __INPUT_FILE__
+  output_path = __OUTPUT_FILE__
+  if len(sys.argv)>=2:
+    input_path  = sys.argv[1]
+  if len(sys.argv)>=3:
+    output_path = sys.argv[2]
+  json_obj = create_json(input_path)
+  with open(output_path, 'w') as outfile:
     json.dump(json_obj, outfile)
 
 
