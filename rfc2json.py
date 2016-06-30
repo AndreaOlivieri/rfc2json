@@ -23,7 +23,11 @@ def create_json( rfc_index_text ):
       json_sub_obj = {}
       json_sub_obj["title"]      = clean_text(match[2])
       json_sub_obj["authors"]    = re.findall(__AUTHORS_REGEX__, clean_text(match[3]))
-      json_sub_obj["issue_data"] = clean_text(match[4])
+      month, year = clean_text(match[4]).split(" ");
+      json_sub_obj["issue_data"] = {
+        "month": month,
+        "year": year
+      }
       if match[5]!="":  json_sub_obj["format"]       = re.findall(__FORMAT_REGEX__,   clean_text(match[5]))[0]
       if match[6]!="":  json_sub_obj["obsolets"]     = re.findall(__RFC_REGEX__,      clean_text(match[6]))     #list of rfc
       if match[7]!="":  json_sub_obj["obsoleted_by"] = re.findall(__RFC_REGEX__,      clean_text(match[7]))     #list of rfc
@@ -41,15 +45,17 @@ def clean_text(text):
 
 
 def main():
-  print("Read RFC Index text")
+  print("Read RFC Index")
   rfc_index_text = urllib.urlopen(__RFC_INDEX_URL__).read()
   print("Done")
   output_path = __OUTPUT_FILE__
   if len(sys.argv)>=2:
     output_path = sys.argv[1]
   json_obj = create_json(rfc_index_text)
+  print("Write output file")
   with open(output_path, 'w') as outfile:
     json.dump(json_obj, outfile)
+  print("Done")
 
 
 if __name__ == "__main__":
