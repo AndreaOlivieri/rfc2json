@@ -27,7 +27,6 @@ def create_json( rfc_index_text ):
     else:
       json_sub_obj = {}
       title_authours_date = clean_text(match[2])
-      #json_sub_obj["authors"]    = re.findall(__AUTHORS_REGEX__, clean_text(match[3]))
       date = re.findall(__DATE_REGEX__, title_authours_date)[0]
       month = date[0]
       year = date[1]
@@ -37,10 +36,10 @@ def create_json( rfc_index_text ):
         "year": year
       }
       if match[3]!="": json_sub_obj["format"]       = re.findall(__FORMAT_REGEX__,   clean_text(match[3]))[0]
-      if match[4]!="": json_sub_obj["obsolets"]     = re.findall(__RFC_REGEX__,      clean_text(match[4]))     #list of rfc
-      if match[5]!="": json_sub_obj["obsoleted_by"] = re.findall(__RFC_REGEX__,      clean_text(match[5]))     #list of rfc
-      if match[6]!="": json_sub_obj["updates"]      = re.findall(__RFC_REGEX__,      clean_text(match[6]))     #list of rfc
-      if match[7]!="": json_sub_obj["updated_by"]   = re.findall(__RFC_REGEX__,      clean_text(match[7]))     #list of rfc
+      if match[4]!="": json_sub_obj["obsolets"]     = clearRFC(re.findall(__RFC_REGEX__, clean_text(match[4])))     #list of rfc
+      if match[5]!="": json_sub_obj["obsoleted_by"] = clearRFC(re.findall(__RFC_REGEX__, clean_text(match[5])))    #list of rfc
+      if match[6]!="": json_sub_obj["updates"]      = clearRFC(re.findall(__RFC_REGEX__, clean_text(match[6])))    #list of rfc
+      if match[7]!="": json_sub_obj["updated_by"]   = clearRFC(re.findall(__RFC_REGEX__, clean_text(match[7])))    #list of rfc
       if match[8]!="": json_sub_obj["also_fyi"]     = re.findall(__ALSO_FYI_REGEX__, clean_text(match[8]))[0]
       if match[9]!="": json_sub_obj["status"]       = re.findall(__STATUS_REGEX__,   clean_text(match[9]))[0]
       if match[10]!="": json_sub_obj["doi"]          = re.findall(__DOI_REGEX__,     clean_text(match[10]))[0]
@@ -54,6 +53,12 @@ def create_json( rfc_index_text ):
 def clean_text(text):
   return re.sub('\s+', ' ', text).strip()
 
+def clearRFC(rfc_list):
+  rfcs = []
+  for rfc in rfc_list:
+    if (rfc.startswith("RFC")):
+      rfcs.append(rfc)
+  return rfcs
 
 def main():
   print("Read RFC Index")
